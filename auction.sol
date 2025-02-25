@@ -11,6 +11,7 @@ contract Auction_Compare {
 
     uint256 public highestBid;
     uint256[2] public highestHash;
+    address public winner;
 
     mapping (address => Bid) public bids;
     address[] public bidders;
@@ -39,18 +40,18 @@ contract Auction_Compare {
         bidders.push(msg.sender);
     }
 
-    function endAuction(VerifierCompare.Proof memory proof, uint[9] memory input) public{
+    function endAuction(VerifierCompare.Proof memory proof, uint[10] memory input) public{
         bool isValid = verifierCompare.verifyTx(proof, input);
-        // address winner;
+        uint position_winner;
 
         if (isValid) {
             highestBid =  input[6]; 
-            highestHash = [input[7], input[8]];
+            position_winner = input[7];
+            highestHash = [input[8], input[9]];
         }
 
-        // for(uint i = 0;i < bidders.length;i++){
-        //     if (bids[])
-        // }
-        
+        if (bids[bidders[position_winner]].hash_bid[0] == highestHash[0] && bids[bidders[position_winner]].hash_bid[1] == highestHash[1]){
+            winner = bidders[position_winner];
+        }
     }
 }
